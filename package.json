@@ -1,0 +1,23 @@
+{
+  "name": "mock_poc",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Jeremy Lu <jlu@twmug.com>",
+  "license": "MIT",
+  "scripts": {
+    "test": "jest --watch"
+  },
+  "dependencies": {
+    "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "jest": "^27.0.6"
+  },
+  "jest": {
+    "testTimeout": 80000000,
+    "clearMocks": true,
+    "resetMocks": true,
+    "restoreMocks": true,
+    "resetModules": true
+  }
+}
