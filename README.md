@@ -2,7 +2,7 @@
 # 資訊
 
   - Nov 17, 2021: v1
-  - Jeremy Lu <jlu@twmug.com>
+  - Jeremy Lu (jlu@twmug.com)
 
 # 情境
 
