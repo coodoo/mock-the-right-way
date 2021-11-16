@@ -24,6 +24,14 @@
 
   - 盡量減少人工撰寫 mock 的時間與降低外人使用 mock 的成本
 
+# 前提
+
+  - 注意 unit test 與 integration test 彼此無法互相取代，兩個都要寫
+
+  - 但在 unit test 內為了能人工觸發不同的成功與錯誤劇情並且避免真的執行 side effects 因此需要寫 mock
+
+  - 此 repo 的重點在研究正確與安全的 mock 手法，而非用 unit test 取代 integration test
+
 # 檔案
 
   - `a.js` 即為情境中的 A
