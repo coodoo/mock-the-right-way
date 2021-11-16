@@ -36,6 +36,8 @@
 
 # 執行
 
+  $ yarn          ← 安裝 npm 套件
+
   $ jest a.unit   ← 觀察如何測試 A
 
   $ jest b.smoke  ← 觀察如何確保 B mock 行為與本尊一致
