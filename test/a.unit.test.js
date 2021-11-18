@@ -1,6 +1,7 @@
 const _ = require('lodash')
-const { test_data_a } = require('../a')
-const { test_data_b } = require('../b')
+const { mock_a } = require('../a')
+const { mock_b } = require('../b')
+const { mocker } = require('../test_helper')
 
 // 說明
 // 示範寫 a 的 unit test 時會將 b mock 起來
@@ -8,25 +9,25 @@ const { test_data_b } = require('../b')
 describe('a unit test', () => {
   //
   beforeEach(() => {
-
     // 用 mock 版取代本尊 b 就不會真的執行
     const mod = require('../b')
     jest.spyOn(mod, 'b')
 
-    // 注意 mocked_b 的 signature 是先收一個參數 test_data_b
+    // mocker 的功能是建立 b 的替身版本
+    // 注意 mocker 的 signature 是先收一個參數 test_data
     // 然後返還一支 curried fn 等著第二次呼叫時收 (m, n) 參數才真正進行運算
-    // 如此 mocked_b 內部會依 test_data_b 的資料比對與返還結果
-    mod.b = mod.mocked_b(test_data_b)
+    // 這支 curried fn 就是 mocked_b (替身版本)
+    mod.b = mocker(mock_b)
 
     // 注意：下面兩寫法皆無效
     // mod.b.mockImplementation = mod.mocked_b
     // mod.b.mockReturnValue(9)
   })
 
-  // 遍歷 a.js 的 test_data_a 驗証計算結果正確
+  // 遍歷 a.js 的 mock_a 驗証計算結果正確
   // 如此即不需複製多個 test case 比較簡潔、易讀與好管理
-  // 只需專心維護一份 single truth 也就是 test_data_a 即可
-  test.each(test_data_a)(`a 各種計算應成功`, ({ m, n, ans }) => {
+  // 只需專心維護一份 single truth 也就是 mock_a 即可
+  test.each(mock_a)(`a 各種計算應成功`, ({ m, n, ans }) => {
     const mod = require('../b')
     const { a } = require('../a')
 

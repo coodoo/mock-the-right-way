@@ -24,11 +24,11 @@ exports.a = (m, n) => {
   }
 }
 
-/* test data
+/* mock data
 -------------------------------------------------- */
 
-// a.js 專用的測資
-exports.test_data_a = [
+// a 的測資
+exports.mock_a = [
   {
     m: -1,
     n: 2,

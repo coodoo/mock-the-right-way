@@ -12,3 +12,18 @@
     - 大幅減化 test case 內複製、貼上的情況而改用 jest.each(test_data)
     - 新增 `b.unit.test` 示範使用同份 `test_data_b` 測試 `b` 本身
     - 新增此份 `CHANGELOG`
+
+  - Nov 19, 2021: v3
+
+    - 新增 `test_helper.js` 放共用的程式
+
+      - 將 `matcher` 移入 `test_helper.js` 內可共用
+
+      - 於 `test_helper.js` 內新增 `mocker` 可建立任何 fn 的替身版本
+
+    - 簡化 `a.js` 與 `b.js` 的內容
+
+      - 只留下定義 test data 的地方
+      - 並將測資更名為 `mock_a` 與 `mock_b` 以方便識別
+
+    - 修改所有 test case 改用 `test_helper.js` 內之 `matcher` 與 `mocker` 指令
