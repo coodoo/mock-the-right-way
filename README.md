@@ -1,9 +1,3 @@
-
-# 資訊
-
-  - Nov 17, 2021: v1
-  - Jeremy Lu (jlu@twmug.com)
-
 # 情境
 
   - A 呼叫 B，但 B 內部會寄信，寫 A unit test 時該如何處理 B？
@@ -48,6 +42,8 @@
 
   $ jest a.unit   ← 觀察如何測試 A
 
+  $ jest b.unit   ← 觀察如何測試 B
+
   $ jest b.smoke  ← 觀察如何確保 B mock 行為與本尊一致
 
 # 解法
@@ -64,6 +60,8 @@
 
   - 實作手法是在 smoke test 內用一組測資同時操作本尊與 mock 並比較兩者答案是否相同
 
+  - 盡量透過 `test_data` 表列各種參數與預期結果做為 `single source of truth` 供 test case 使用，如此可高度自動化與減少手寫比例
+
 # 好處
 
   - mock 只需寫在一處較好維護，而非散落在多個 unit test 內並由外人手工撰寫
@@ -72,7 +70,7 @@
 
   - 外加 smoke test 驗証以確保 mock 與本尊行為一致
 
-  - 避免 unit/integration test 帶來之`虛假的安全感`
+  - 避免 unit/integration test 帶來之`錯誤的安全感`
 
 # 壞處
 
@@ -116,10 +114,18 @@
 
   - referential transparency
 
-    - 如果一個 function 拿到 `same input` 總能返還 `same ouput` 即可稱為 referential transparency
+    - 如果一個 `function` 拿到 `same input` 總能返還 `same ouput` 即可稱為 referential transparency
 
     - 這代表可用 `output` 取代此 `function` 而不需執行它，通常這是 pure function 的特色
 
     - `pure` 是指 function 內部沒有操作任何 side effects (例如 DB, API 甚至 console.log)
 
     - 此例中我們就是想用 mock 實現 referential transparency 以取代本尊
+
+  - single source of truth
+
+    - 程式中相同的資料只應有一份並存在於單一位置，而非複製多份散落各檔案間
+
+    - 如此可避免多份資料隨時間而呈現不同步狀態
+
+    - 此例中各檔案內的 `test_data` 即為 `single truth` 供外界使用
