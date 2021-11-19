@@ -129,3 +129,60 @@
     - 如此可避免多份資料隨時間而呈現不同步狀態
 
     - 此例中各檔案內的 `test_data` 即為 `single truth` 供外界使用
+
+# 後續觀察
+
+  # 先寫好一份 b test data 真是好處多多
+
+    - 可自動跑 smoke test 驗証真、假版結果是否一致
+
+    - 可自動生成 b 的 unit test
+
+    - a unit test 也可用此份資料建立 mock b 版本
+
+# 要如何人工觸發失敗劇情？
+
+  - A -> B -> db 要如何人工觸發 db 寫入錯誤的失敗劇情
+
+  - 解法是取得 mock_fn 後可人工覆寫返還值以建立需要的失敗劇情
+
+    const mock_fn = mocker(test_data) // 這是成功劇情的用法
+
+    mock_fn.mockResolvedValue(false) // 接著覆寫失敗劇情的返還值
+
+  - 也就是 test_data 內維持只放成功劇情，是真正能通過本尊邏輯的參數
+
+    - 如此外界操作本尊與分身的手法都一樣，也會得到相同結果
+
+    - 就能用 smoke 來測試 referential transparency
+
+  - 而失敗劇情則由後天人為觸發
+
+  - 可想成
+
+    - 失敗劇情本非屬常態，而是人工刻意觸發
+
+    - 因此需先經由人工覆寫 mock_fn 也是合理的設計
+
+  # 實例
+
+    # 情境
+      - A -> B -> db
+
+      - 目前在寫 A unit test
+        - A 傳一筆訂單給 B 處理
+        - B 會從 db 撈資料以確認訂單編號無誤，如果有誤則返還 `Error`
+        - A 拿到 B 返還的 `Error` 後要操作 `Log.error()` 註記此事
+        - 在 unit test 內會驗証 `Log.error()` 是否有被觸發一次並傳入預期參數
+
+      # 解法
+        - A 先取得 B 的 mock_fn 版本
+        - 然後覆寫 mock_fn.mockResolvedValue() 為需要的錯誤值
+        - 接著 A 傳訂單給 B 就會拿到此錯誤值而觸發後續 `Log.error()` 流程
+        - 然後 unit test 內即可 `expect(Log.error.call.mocks)` 的呼叫次數
+
+      # 討論
+        - 需要後天再覆寫 mock_fn 的原因是 B 的 test_data 內無法達成此事
+        - 因為該份 test_data 是本尊與分身共用的，將來在 smoke test 內會驗証兩者答案是否相同
+        - 因此無法透過 test_data 來強迫 B 操作 db 後返還錯誤值，那會讓本尊與分身的執行結果不同
+        - 所才只能後天覆寫 mock_fn 來返還需要的錯誤值
